@@ -5,6 +5,7 @@ import time
 
 def main():
     auth_token = "<auth_token>"
+    member_id = "<member_id>"
     kariyer = KariyerSearch(auth_token)
     client = JobDetailClient(auth_token)
     job_manager = JobManager(auth_token)
@@ -13,7 +14,7 @@ def main():
     while True:
         print(f"\nProcessing page {page}")
         # Search for jobs
-        search_result = kariyer.search(member_id=26991322, page=page, size=50)
+        search_result = kariyer.search(member_id=member_id, page=page, size=50,url="___wa=1,2,5,16,22,54,55,63,78___hc=N___dsaj=true")
         if not search_result:
             print("No search results found")
             break

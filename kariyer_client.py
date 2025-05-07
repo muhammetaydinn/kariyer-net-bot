@@ -11,7 +11,7 @@ class KariyerSearch:
             "Content-Type": "application/json"
         }
 
-    def search(self, member_id: int, page: int = 1, size: int = 5, url: str = "___wa=1,2,5,16,22,54,55,63,78___hc=N___dsaj=true") -> Optional[Response]:
+    def search(self, member_id: int, page: int = 1, size: int = 5, url: str = "") -> Optional[Response]:
         try:
             response = requests.post(
                 self.base_url,
