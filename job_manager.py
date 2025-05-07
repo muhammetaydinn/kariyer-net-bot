@@ -69,16 +69,19 @@ class JobManager:
     def process_job(self, job_id: int, search_result: Response, job_detail: JobDetailResponse) -> bool:
         """İş ilanını işler ve başvuru yapar."""
         # Eğer ilan daha önce işlenmişse atla
-        if self.is_job_processed(job_id):
-            print(f"Skipping job {job_id} - Already applied or failed")
+        if str(job_id) in self.applied_jobs:
+            print(f"Skipping job {job_id} - Already applied")
             return True
+        elif str(job_id) in self.failed_jobs:
+            print(f"Skipping job {job_id} - Previously failed")
+            return False
 
         print(f"\nProcessing job {job_id}")
 
         # Application body oluştur
         application_body = self.application_service.create_application_body(search_result, job_detail, job_id)
         if not application_body:
-            print(f"Could not create application body for job {job_id}")
+            print(f"Failed to create application body for job {job_id}")
             self.save_job_to_set(self.failed_jobs_file, job_id)
             self.save_error_log(job_id, "Could not create application body")
             return False
@@ -95,7 +98,7 @@ class JobManager:
             else:
                 error_message = result.get("body", {}).get("message", "")
                 if "Bu ilana daha önce başvuru yaptın" in error_message:
-                    print(f"Already applied to job {job_id}")
+                    print(f"Already applied to job {job_id} (detected during application)")
                     self.save_job_to_set(self.applied_jobs_file, job_id)
                     return True
                 else:
@@ -108,11 +111,11 @@ class JobManager:
             # Response text'ten hata mesajını kontrol et
             error_text = self.application_client.last_error_text
             if self.is_already_applied_error(error_text):
-                print(f"Already applied to job {job_id}")
+                print(f"Already applied to job {job_id} (detected from error response)")
                 self.save_job_to_set(self.applied_jobs_file, job_id)
                 return True
             else:
-                print(f"Failed to apply to job {job_id}")
+                print(f"Failed to apply to job {job_id} (request failed)")
                 self.save_job_to_set(self.failed_jobs_file, job_id)
                 self.save_error_log(job_id, "Request failed", error_text)
                 return False

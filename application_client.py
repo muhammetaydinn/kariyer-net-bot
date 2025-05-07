@@ -33,8 +33,10 @@ class ApplicationClient:
             return response.json()
 
         except requests.exceptions.RequestException as e:
-            logger.error(f"Error applying to job: {e}")
             if hasattr(e.response, 'text'):
                 self.last_error_text = e.response.text
-                logger.error(f"Response text: {e.response.text}")
+                # Sadece "daha önce başvuru yapıldı" hatası değilse logla
+                if "Bu ilana daha önce başvuru yaptın" not in e.response.text:
+                    logger.error(f"Error applying to job: {e}")
+                    logger.error(f"Response text: {e.response.text}")
             return None 
