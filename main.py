@@ -12,9 +12,9 @@ def main():
     
     page = 1
     while True:
-        print(f"\nProcessing page {page}")
+        print(f"\nProcessing page {page}")  
         # Search for jobs
-        search_result = kariyer.search(member_id=member_id, page=page, size=50,url="___wa=1,2,5,16,22,54,55,63,78___hc=N___dsaj=true")
+        search_result = kariyer.search(member_id=member_id, page=page, size=50,url="istanbul/___ct=34,82___wa=1,2,5,16,22,46,48,54,55,63,78,79,87___hc=N___dsaj=true")
         if not search_result:
             print("No search results found")
             break

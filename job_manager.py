@@ -6,6 +6,7 @@ from job_detail_models import JobDetailResponse
 from search_models import Response
 from application_service import ApplicationService
 from application_client import ApplicationClient
+from job_tracker import JobTracker
 
 class JobManager:
     def __init__(self, auth_token: str):
@@ -18,6 +19,7 @@ class JobManager:
         # Servisleri başlat
         self.application_service = ApplicationService()
         self.application_client = ApplicationClient(auth_token)
+        self.job_tracker = JobTracker()
 
     def _load_job_set(self, filename: str) -> Set[str]:
         """İş ilanlarını dosyadan set olarak yükler."""
@@ -78,6 +80,12 @@ class JobManager:
 
         print(f"\nProcessing job {job_id}")
 
+        # Search'ten iş ilanı bilgilerini al
+        job = next((job for job in search_result.data.jobs.items if job.id == job_id), None)
+        if not job:
+            print(f"Job {job_id} not found in search results")
+            return False
+
         # Application body oluştur
         application_body = self.application_service.create_application_body(search_result, job_detail, job_id)
         if not application_body:
@@ -94,6 +102,49 @@ class JobManager:
             if result.get("header", {}).get("isSuccess", False):
                 print(f"Successfully applied to job {job_id}")
                 self.save_job_to_set(self.applied_jobs_file, job_id)
+                
+                # Excel'e kaydet
+                form_questions = []
+                form_answers = []
+                for form in job_detail.result.job_form:
+                    for question in form.question_list:
+                        form_questions.append({
+                            "id": question.id,
+                            "text": question.question
+                        })
+                        # Cevabı bul
+                        answer = None
+                        if form.answer:
+                            answer = form.answer
+                        else:
+                            selected_choice = next(
+                                (choice for choice in question.question_choices if choice.is_selected),
+                                None
+                            )
+                            if selected_choice:
+                                answer = selected_choice.choice
+                            elif form.answered_choice_id:
+                                matching_choice = next(
+                                    (choice for choice in question.question_choices 
+                                     if choice.id == form.answered_choice_id),
+                                    None
+                                )
+                                if matching_choice:
+                                    answer = matching_choice.choice
+                        
+                        form_answers.append({
+                            "question_id": question.id,
+                            "answer": answer
+                        })
+                
+                self.job_tracker.add_application(
+                    job_id=job_id,
+                    company_name=job.company_name,
+                    job_title=job.title,
+                    form_questions=form_questions,
+                    form_answers=form_answers
+                )
+                
                 return True
             else:
                 error_message = result.get("body", {}).get("message", "")
