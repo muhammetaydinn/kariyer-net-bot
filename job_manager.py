@@ -10,9 +10,9 @@ from job_tracker import JobTracker
 
 class JobManager:
     def __init__(self, auth_token: str):
-        self.applied_jobs_file = "applied_jobs.txt"
-        self.failed_jobs_file = "failed_jobs.txt"
-        self.failed_jobs_log_file = "failed_jobs_logs.txt"
+        self.applied_jobs_file = "generated/applied_jobs.txt"
+        self.failed_jobs_file = "generated/failed_jobs.txt"
+        self.failed_jobs_log_file = "generated/failed_jobs_logs.txt"
         self.applied_jobs = self._load_job_set(self.applied_jobs_file)
         self.failed_jobs = self._load_job_set(self.failed_jobs_file)
         

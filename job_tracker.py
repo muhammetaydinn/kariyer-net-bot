@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Dict, Any, List
 
 class JobTracker:
-    def __init__(self, excel_file: str = "applied_job_data.xlsx"):
+    def __init__(self, excel_file: str = "generated/applied_job_data.xlsx"):
         self.excel_file = excel_file
         self._initialize_excel()
 
