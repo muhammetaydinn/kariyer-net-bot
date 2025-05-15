@@ -1,7 +1,7 @@
 import logging
 import requests
 from typing import Optional, Dict, Any
-from application_models import ApplicationBody
+from src.models.application_models import ApplicationBody
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

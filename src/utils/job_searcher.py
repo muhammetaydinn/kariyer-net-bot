@@ -1,6 +1,6 @@
-from kariyer_client import KariyerSearch
-from job_detail_client import JobDetailClient
-from job_manager import JobManager
+from src.clients.kariyer_client import KariyerSearch
+from src.clients.job_detail_client import JobDetailClient
+from src.services.job_manager import JobManager
 import time
 
 class JobSearcher:

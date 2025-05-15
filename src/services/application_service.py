@@ -1,8 +1,8 @@
 import logging
 from typing import Optional, List, Tuple
-from job_detail_models import JobDetailResponse
-from search_models import Response
-from application_models import ApplicationBody
+from src.models.job_detail_models import JobDetailResponse
+from src.models.search_models import Response
+from src.models.application_models import ApplicationBody
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

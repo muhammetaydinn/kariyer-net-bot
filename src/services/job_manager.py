@@ -2,11 +2,11 @@ import os
 import json
 from datetime import datetime
 from typing import Set, Optional, Dict, Any
-from job_detail_models import JobDetailResponse
-from search_models import Response
-from application_service import ApplicationService
-from application_client import ApplicationClient
-from job_tracker import JobTracker
+from src.models.job_detail_models import JobDetailResponse
+from src.models.search_models import Response
+from src.services.application_service import ApplicationService
+from src.clients.application_client import ApplicationClient
+from src.services.job_tracker import JobTracker
 
 class JobManager:
     def __init__(self, auth_token: str):

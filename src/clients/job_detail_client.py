@@ -1,6 +1,6 @@
 import requests
 from typing import Optional
-from job_detail_models import JobDetailResponse
+from src.models.job_detail_models import JobDetailResponse
 
 class JobDetailClient:
     def __init__(self, auth_token: str):

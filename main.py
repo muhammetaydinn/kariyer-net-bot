@@ -1,4 +1,4 @@
-from job_searcher import JobSearcher
+from src.utils.job_searcher import JobSearcher
 
 def main():
     auth_token = "<auth_token>"

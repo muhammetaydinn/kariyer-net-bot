@@ -1,6 +1,6 @@
 import requests
 from typing import Optional
-from search_models import Response
+from src.models.search_models import Response
 
 class KariyerSearch:
     def __init__(self, auth_token: str):
